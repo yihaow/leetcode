@@ -7,39 +7,24 @@
  * };
  */
 public class Solution {
-    private HashMap<UndirectedGraphNode,UndirectedGraphNode> map = new HashMap<UndirectedGraphNode,UndirectedGraphNode>();
-    private ArrayList<UndirectedGraphNode> arr = new ArrayList<UndirectedGraphNode>();
+    private HashMap<UndirectedGraphNode,UndirectedGraphNode> map = new HashMap();
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
         if (node == null) {
             return null;
         }
-        
-        bfs(node);
-        for (UndirectedGraphNode oldNode : arr) {
-            List<UndirectedGraphNode> neighborList = oldNode.neighbors;
-            for (UndirectedGraphNode neighbor : neighborList) {
-                map.get(oldNode).neighbors.add(map.get(neighbor));
+        UndirectedGraphNode newNode = new UndirectedGraphNode(node.label);
+        map.put(node,newNode);
+        List<UndirectedGraphNode> arr = node.neighbors;
+        for (UndirectedGraphNode neighbor : arr) {
+            if (map.containsKey(neighbor)) {
+                newNode.neighbors.add(map.get(neighbor));
+            }
+            else {
+                UndirectedGraphNode newNeighbor = cloneGraph(neighbor);
+                newNode.neighbors.add(newNeighbor);
+                map.put(neighbor,newNeighbor);
             }
         }
-        return map.get(node);
+        return newNode;
     }
-    private void bfs(UndirectedGraphNode node) {
-        Queue<UndirectedGraphNode> queue = new LinkedList<UndirectedGraphNode>();
-        queue.offer(node);
-        map.put(node, new UndirectedGraphNode(node.label));
-        arr.add(node);
-        
-        while (!queue.isEmpty()) {
-            UndirectedGraphNode head = queue.poll();
-            List<UndirectedGraphNode> nodes = head.neighbors;
-            for (UndirectedGraphNode neighbor : nodes) {
-                if (!map.containsKey(neighbor)) {
-                    map.put(neighbor, new UndirectedGraphNode(neighbor.label));
-                    queue.offer(neighbor);
-                    arr.add(neighbor);
-                }
-            }
-        }
-    }
-    
 }
