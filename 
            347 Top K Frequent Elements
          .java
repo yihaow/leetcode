@@ -1,31 +1,28 @@
 public class Solution {
     public List<Integer> topKFrequent(int[] nums, int k) {
-        HashMap<Integer, Integer> freq = new HashMap();
-        List<Integer>[] sort = new List[nums.length + 1];
-        if (nums == null || nums.length == 0) {
-            return null;
-        }
-        for (int i = 0; i < nums.length; i++) {
-            if (!freq.containsKey(nums[i])) {
-                freq.put(nums[i], 1);
+        HashMap<Integer, Integer> freq = new HashMap<Integer, Integer>();
+        PriorityQueue<Map.Entry<Integer, Integer>> sort = new PriorityQueue<Map.Entry<Integer, Integer>>(new Comparator<Map
+            .Entry<Integer, Integer>>(){
+            public int compare(Map.Entry<Integer, Integer> a, Map.Entry<Integer, Integer> b) {
+                return b.getValue() - a.getValue();
+            }
+        });
+        for (int num : nums) {
+            if (!freq.containsKey(num)) {
+                freq.put(num, 1);
             }
             else {
-                freq.put(nums[i], freq.get(nums[i]) + 1);
+                freq.put(num, freq.get(num) + 1);
             }
         }
-        for (int key : freq.keySet()) {
-            int frequence = freq.get(key);
-            if (sort[frequence] == null) {
-                sort[frequence] = new ArrayList();
-            }
-            sort[frequence].add(key);
+        for (Map.Entry<Integer, Integer> key : freq.entrySet()) {
+            sort.offer(key);
         }
-        ArrayList<Integer> res = new ArrayList();
-        for (int j = nums.length; j >= 0 && res.size() < k; j--) {
-            if (sort[j] != null) {
-                res.addAll(sort[j]);
-            }
+        List<Integer> res = new ArrayList();
+        while (res.size() < k) {
+            Map.Entry<Integer, Integer> currKey = sort.poll();
+            res.add(currKey.getKey());
         }
         return res;
-    }
+    }    
 }
