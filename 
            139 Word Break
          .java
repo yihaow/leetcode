@@ -1,16 +1,16 @@
 public class Solution {
     public boolean wordBreak(String s, Set<String> wordDict) {
-        int len = s.length();
-        boolean[] f = new boolean[len + 1];
-        f[0] = true;
-        for (int i = 1; i < len + 1; i++) {
+        int n = s.length();
+        boolean[] wb = new boolean[n + 1];
+        wb[0] = true;
+        for (int i = 1; i < s.length() + 1; i++) {
             for (int j = 0; j < i; j++) {
-                if (f[j] && wordDict.contains(s.substring(j, i))) {
-                    f[i] = true;
+                if (wordDict.contains(s.substring(j,i)) && wb[j]) {
+                    wb[i] = true;
                     break;
                 }
             }
         }
-        return f[len];
+        return wb[n];
     }
 }
