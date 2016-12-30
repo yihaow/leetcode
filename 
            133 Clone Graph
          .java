@@ -7,22 +7,21 @@
  * };
  */
 public class Solution {
-    private HashMap<UndirectedGraphNode,UndirectedGraphNode> map = new HashMap();
+    private HashMap<UndirectedGraphNode,UndirectedGraphNode> nodeMap = new HashMap(); 
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
         if (node == null) {
             return null;
         }
         UndirectedGraphNode newNode = new UndirectedGraphNode(node.label);
-        map.put(node,newNode);
-        List<UndirectedGraphNode> arr = node.neighbors;
-        for (UndirectedGraphNode neighbor : arr) {
-            if (map.containsKey(neighbor)) {
-                newNode.neighbors.add(map.get(neighbor));
+        List<UndirectedGraphNode> neighborList= node.neighbors;
+        nodeMap.put(node, newNode);
+        for (UndirectedGraphNode neighbor : neighborList) {
+            if (nodeMap.containsKey(neighbor)) {
+                newNode.neighbors.add(nodeMap.get(neighbor));
             }
             else {
                 UndirectedGraphNode newNeighbor = cloneGraph(neighbor);
                 newNode.neighbors.add(newNeighbor);
-                map.put(neighbor,newNeighbor);
             }
         }
         return newNode;
